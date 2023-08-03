@@ -8,7 +8,7 @@ class FileService
 {
     public function updateImage($model, $request)
     {
-        //?
+        //? Create an Image Object from the Request
         $image = Image::make($request->file('image'));
 
         //? Delete the old image if exists
@@ -36,7 +36,23 @@ class FileService
         $name = time() . '.' . $extension;
         $image->save(public_path() . '/files/' . $name);
 
+        //? Save it to database
         $model->image = '/files/' . $name;
+        return $model;
+    }
+
+    public function addVideo($model, $request)
+    {
+        //? Extract the video
+        $video = $request->file('video');
+        $extension = $video->getClientOriginalExtension();
+
+        //? Save the video
+        $name = time() . '.' . $extension;
+        $video->move(public_path() . '/files/' . $name);
+
+        //? Save it to database
+        $model->video = '/files/' . $name;
         return $model;
     }
 }
